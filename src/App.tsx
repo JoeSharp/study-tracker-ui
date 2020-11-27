@@ -106,10 +106,32 @@ const confidenceReducer = (
       };
     }
     case "init": {
+      const sections: SectionConfidences = {};
+      const subsections: SubSectionConfidences = {};
+      action.specification.components.forEach((component) =>
+        component.sections.forEach((section) => {
+          sections[section.id] = CONFIDENCE_OPTIONS.map((c) => c.name).reduce(
+            (acc, curr) => ({ ...acc, [curr]: 0 }),
+            {}
+          );
+
+          section.subsections.forEach((subsection) => {
+            if (!subsections[subsection.id]) {
+              subsections[subsection.id] = {};
+            }
+            subsection.requirements.forEach((_, requirementIndex) => {
+              subsections[subsection.id][requirementIndex] =
+                CONFIDENCE_OPTIONS[0].name;
+              sections[section.id][CONFIDENCE_OPTIONS[0].name] += 1;
+            });
+          });
+        })
+      );
+
       return {
         specification: action.specification,
-        sections: {},
-        subsections: {},
+        sections,
+        subsections,
       };
     }
   }
