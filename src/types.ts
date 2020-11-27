@@ -1,22 +1,30 @@
-export interface SubSection {
+export interface SpecSubSection {
+  id: string;
   title: string;
   requirements: string[];
 }
 
-export interface Section {
+export interface SpecSection {
+  id: string;
   title: string;
   description?: string;
-  subsections: SubSection[];
+  subsections: SpecSubSection[];
 }
 
-export interface Component {
+export interface SpecComponent {
+  id: string;
   name: string;
-  sections: Section[];
+  sections: SpecSection[];
 }
 
 export interface Specification {
   examBoard: string;
   subject: string;
   qualificationCode: string;
-  components: Component[];
+  components: SpecComponent[];
+}
+
+export interface ConfidenceOption {
+  name: string;
+  colour: string;
 }

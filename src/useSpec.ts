@@ -6,14 +6,17 @@ const ocrALevelComputerScience: Specification = {
   qualificationCode: "H446",
   components: [
     {
+      id: "Paper 01",
       name: "Computer Systems",
       sections: [
         {
+          id: "1.1",
           title:
             "The characteristics of contemporary processors, input, output and storage devices",
           description: "Components of a computer and their uses",
           subsections: [
             {
+              id: "1.1.1",
               title: "Structure and function of the processor",
               requirements: [
                 "The Arithmetic and Logic Unit; ALU, Control Unit and Registers (Program Counter; PC, Accumulator; ACC, Memory Address Register; MAR, Memory Data Register; MDR, Current Instruction Register; CIR). Buses: data, address and control: how this relates to assembly language programs.",
@@ -24,6 +27,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.1.2",
               title: "Types of processor",
               requirements: [
                 "The differences between and uses of CISC and RISC processors.",
@@ -32,6 +36,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.1.3",
               title: "Input, Output and Storage",
               requirements: [
                 "How different input, output and storage devices can be applied to the solution of different problems.",
@@ -43,11 +48,13 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "1.2",
           title: "Software and Software Development",
           description:
             "Types of software and the different methodologies used to develop software",
           subsections: [
             {
+              id: "1.2.1",
               title: "Systems Software",
               requirements: [
                 "The need for, function and purpose of operating systems.",
@@ -61,6 +68,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.2.2",
               title: "Applications Generation",
               requirements: [
                 " The nature of applications, justifying suitable applications for a specific purpose.",
@@ -72,6 +80,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.2.3",
               title: "Software Development",
               requirements: [
                 "Understand the waterfall lifecycle, agile methodologies, extreme programming, the spiral model and rapid application development.",
@@ -80,6 +89,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.2.4",
               title: "Types of Programming Language",
               requirements: [
                 "Need for and characteristics of a variety of programming paradigms.",
@@ -92,10 +102,12 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "1.3",
           title: "Exchanging Data",
           description: "How data is exchanged between different systems",
           subsections: [
             {
+              id: "1.3.1",
               title: "Compression, Encryption and Hashing",
               requirements: [
                 "Lossy vs Lossless compression.",
@@ -105,6 +117,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.3.2",
               title: "Databases",
               requirements: [
                 " Relational database, flat file, primary key, foreign key, secondary key, entity relationship modelling, normalisation and indexing. See appendix 5f.",
@@ -116,6 +129,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.3.3",
               title: "Networks",
               requirements: [
                 "Characteristics of networks and the importance of protocols and standards.",
@@ -131,6 +145,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.3.4",
               title: "Web Technologies",
               requirements: [
                 "HTML, CSS and JavaScript. See appendix 5d",
@@ -142,11 +157,13 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "1.4",
           title: "Data types, data structures and algorithms",
           description:
             "How data is represented and stored within different structures. Different algorithms that can be applied to these structures",
           subsections: [
             {
+              id: "1.4.1",
               title: "Data Types",
               requirements: [
                 "Primitive data types, integer, real/floating point, character, string and Boolean.",
@@ -162,6 +179,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.4.2",
               title: "Data Structures",
               requirements: [
                 "Arrays (of up to 3 dimensions), records, lists, tuples.",
@@ -170,6 +188,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.4.3",
               title: "Boolean Algebra",
               requirements: [
                 "Define problems using Boolean logic. See appendix 5d.",
@@ -182,11 +201,13 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "1.5",
           title: " Legal, moral, cultural and ethical issues",
           description:
             "The individual moral, social, ethical and cultural opportunities and risks of digital technology. Legislation surrounding the use of computers and ethical issues that can or may in the future arise from the use of computers",
           subsections: [
             {
+              id: "1.5.1",
               title: "Computing related legislation",
               requirements: [
                 "The Data Protection Act 1998.",
@@ -196,6 +217,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "1.5.2",
               title: "Moral and Ethical Issues",
               requirements: [
                 `The individual moral, social, ethical and cultural opportunities and risks of digital technology:
@@ -215,13 +237,16 @@ const ocrALevelComputerScience: Specification = {
       ],
     },
     {
+      id: "Paper 02",
       name: "Algorithms and Programming",
       sections: [
         {
+          id: "2.1",
           title: "Elements of computational thinking",
           description: "Understand what is meant by computational thinking",
           subsections: [
             {
+              id: "2.1.1",
               title: "Thinking abstractly",
               requirements: [
                 "The nature of abstraction.",
@@ -231,6 +256,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "2.1.2",
               title: "Thinking ahead",
               requirements: [
                 "Identify the inputs and outputs for a given situation.",
@@ -240,6 +266,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "2.1.3",
               title: "Thinking procedurally",
               requirements: [
                 "Identify the components of a problem.",
@@ -249,6 +276,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "2.1.4",
               title: "Thinking logically",
               requirements: [
                 "Identify the points in a solution where a decision has to be taken.",
@@ -257,6 +285,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "2.1.5",
               title: "Thinking concurrently",
               requirements: [
                 "Determine the parts of a problem that can be tackled at the same time.",
@@ -266,11 +295,13 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "2.2",
           title: "Problem Solving and Programming",
           description:
             "How computers can be used to solve problems and programs can be written to solve them (Learners will benefit from being able to program in a procedure/imperative language and object oriented language.)",
           subsections: [
             {
+              id: "2.2.1",
               title: "Programming Techniques",
               requirements: [
                 "Programming constructs: sequence, iteration, branching.",
@@ -282,6 +313,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "2.2.2",
               title: "Computational Methods",
               requirements: [
                 "Features that make a problem solvable by computational methods.",
@@ -301,11 +333,13 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "2.3",
           title: "Algorithms",
           description:
             "The use of algorithms to describe problems and standard algorithms",
           subsections: [
             {
+              id: "2.3.1",
               title: "Algorithms",
               requirements: [
                 "Analysis and design of algorithms for a given situation.",
@@ -321,12 +355,15 @@ const ocrALevelComputerScience: Specification = {
       ],
     },
     {
+      id: "Component3",
       name: "NEA Programming Project",
       sections: [
         {
+          id: "3.1",
           title: "Analysis of the Problem",
           subsections: [
             {
+              id: "3.1.1",
               title: "Problem Identification",
               requirements: [
                 "Describe and justify the features that make the problem solvable by computational methods.",
@@ -334,12 +371,14 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "3.1.2",
               title: "Stakeholders",
               requirements: [
                 "Identify and describe those who will have an interest in the solution explaining how the solution is appropriate to their needs (this may be named individuals, groups or persona that describes the target end user).",
               ],
             },
             {
+              id: "3.1.3",
               title: "Research the Problem",
               requirements: [
                 "Research the problem and solutions to similar problems to identify and justify suitable approaches to a solution.",
@@ -348,6 +387,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "3.1.4",
               title: "Specific the Proposed Solution",
               requirements: [
                 "Specify and justify the solution requirements including hardware and software configuration (if appropriate).",
@@ -357,15 +397,18 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "3.2",
           title: "Design of the Solution",
           subsections: [
             {
+              id: "3.2.1",
               title: "Decompose the Problem",
               requirements: [
                 "Break down the problem into smaller parts suitable for computational solutions justifying any decisions made.",
               ],
             },
             {
+              id: "3.2.2",
               title: "Describe the Solution",
               requirements: [
                 "Explain and justify the structure of the solution.",
@@ -375,6 +418,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "3.2.3",
               title: "Describe the Approach to Testing",
               requirements: [
                 "Identify the test data to be used during the iterative development and post development phases and justify the choice of this test data.",
@@ -383,9 +427,11 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "3.3",
           title: "Developing the Solution",
           subsections: [
             {
+              id: "3.3.1",
               title: "Iterative Development Process",
               requirements: [
                 "Provide annotated evidence of each stage of the iterative development process justifying any decision made.",
@@ -393,6 +439,7 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "3.3.2",
               title: "Testing to Inform Development",
               requirements: [
                 "Provide annotated evidence for testing at each stage justifying the reason for the test.",
@@ -402,9 +449,11 @@ const ocrALevelComputerScience: Specification = {
           ],
         },
         {
+          id: "3.4",
           title: "Evaluation",
           subsections: [
             {
+              id: "3.4.1",
               title: "Testing to inform evaluation",
               requirements: [
                 "Provide annotated evidence of testing the solution of robustness at the end of the development process.",
@@ -412,18 +461,21 @@ const ocrALevelComputerScience: Specification = {
               ],
             },
             {
+              id: "3.4.2",
               title: "Success of the Solution",
               requirements: [
                 "Use the test evidence from the development and post development process to evaluate the solution against the success criteria from the analysis.",
               ],
             },
             {
+              id: "3.4.3",
               title: "Describe the final product",
               requirements: [
                 "Provide annotated evidence of the usability features from the design, commenting on their effectiveness.",
               ],
             },
             {
+              id: "3.4.4",
               title: "Maintenance and development",
               requirements: [
                 "Discuss the maintainability of the solution. (b) Discuss potential further development of the solution.",
