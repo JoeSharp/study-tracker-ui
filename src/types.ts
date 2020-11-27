@@ -5,7 +5,7 @@ export interface SubSection {
 
 export interface Section {
   title: string;
-  description: string;
+  description?: string;
   subsections: SubSection[];
 }
 
