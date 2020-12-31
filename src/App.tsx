@@ -15,6 +15,13 @@ const MainDiv = styled.div`
 `;
 const RequirementTable = styled.table`
   text-align: left;
+  border-collapse: collapse;
+
+  th,
+  td {
+    border: solid thin black;
+    padding: 0.5rem;
+  }
 `;
 
 interface OnChangeById {
@@ -80,8 +87,13 @@ const App: React.FunctionComponent = () => {
               <tr>
                 <th>{component.name}</th>
                 <th>%</th>
-                {CONFIDENCE_OPTIONS.map(({ name }) => (
-                  <th key={name}>{name}</th>
+                {CONFIDENCE_OPTIONS.map(({ name, colour }) => (
+                  <th
+                    key={name}
+                    style={{ color: "white", backgroundColor: colour }}
+                  >
+                    {name}
+                  </th>
                 ))}
               </tr>
             </thead>
