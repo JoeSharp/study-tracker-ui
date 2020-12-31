@@ -1,12 +1,13 @@
 import React from "react";
-import useSpec from "./useSpec";
+import useSpec from "./useSpecification/useSpecification";
 import styled from "styled-components";
-import ConfidencePicker, { CONFIDENCE_OPTIONS } from "./ConfidencePicker";
+import ConfidencePicker, { CONFIDENCE_OPTIONS } from "./components/ConfidencePicker";
+import SpecificationPicker, { usePicker as useSpecificationPicker } from "./components/SpecificationPicker";
 import {
-  SpecComponent,
+  SpecificationComponent,
   Specification,
-  SpecSection,
-  SpecSubSection,
+  SpecificationSection,
+  SpecificationSubSection,
 } from "./types";
 
 const MainDiv = styled.div`
@@ -40,6 +41,7 @@ interface ConfidencesState {
 
 const DEFAULT_CONFIDENCE: ConfidencesState = {
   specification: {
+    specificationId: 'HOGWARTS',
     examBoard: "Hogwards",
     qualificationCode: "MGS",
     subject: "Muggle Studdies",
@@ -56,9 +58,9 @@ interface ConfidenceInitAction {
 
 interface ConfidenceSetAction {
   type: "set";
-  component: SpecComponent;
-  section: SpecSection;
-  subsection: SpecSubSection;
+  component: SpecificationComponent;
+  section: SpecificationSection;
+  subsection: SpecificationSubSection;
   requirementIndex: number;
   confidence: string;
 }
@@ -137,11 +139,12 @@ const confidenceReducer = (
   }
 };
 
-const getRequirementId = ({ id }: SpecSubSection, rIndex: number) =>
+const getRequirementId = ({ id }: SpecificationSubSection, rIndex: number) =>
   `${id}-${rIndex}`;
 
-function App() {
-  const { specification } = useSpec();
+const App: React.FunctionComponent = () => {
+  const { componentProps: specPickerProps } = useSpecificationPicker();
+  const specification = useSpec(specPickerProps.value);
   const { examBoard, qualificationCode, subject, components } = specification;
 
   const [confidences, dispatchConfidence] = React.useReducer(
@@ -182,6 +185,7 @@ function App() {
 
   return (
     <MainDiv>
+      <SpecificationPicker {...specPickerProps} />
       <h1>{subject}</h1>
       <div>
         {examBoard} - {qualificationCode}
@@ -239,12 +243,12 @@ function App() {
                             <ConfidencePicker
                               onChange={
                                 onConfidenceChangeById[
-                                  getRequirementId(subsection, requirementIndex)
+                                getRequirementId(subsection, requirementIndex)
                                 ]
                               }
                               value={
                                 (confidences.subsections[subsection.id] || {})[
-                                  requirementIndex
+                                requirementIndex
                                 ]
                               }
                             />
