@@ -1,14 +1,14 @@
 import React from "react";
 import useSpec from "./useSpecification/useSpecification";
 import styled from "styled-components";
-import ConfidencePicker, { CONFIDENCE_OPTIONS } from "./components/ConfidencePicker";
-import SpecificationPicker, { usePicker as useSpecificationPicker } from "./components/SpecificationPicker";
-import {
-  SpecificationComponent,
-  Specification,
-  SpecificationSection,
-  SpecificationSubSection,
-} from "./types";
+import ConfidencePicker, {
+  CONFIDENCE_OPTIONS,
+} from "./components/ConfidencePicker";
+import SpecificationPicker, {
+  usePicker as useSpecificationPicker,
+} from "./components/SpecificationPicker";
+import { Confidence, SpecificationSubSection } from "./types";
+import useTracker from "./useTracker";
 
 const MainDiv = styled.div`
   font-family: Arial, Helvetica, sans-serif; ;
@@ -18,143 +18,25 @@ const RequirementTable = styled.table`
 `;
 
 interface OnChangeById {
-  [s: string]: (v: string) => any;
+  [s: string]: (v: Confidence) => any;
 }
-
-interface SectionConfidences {
-  [sectionId: string]: {
-    [confidence: string]: number;
-  };
-}
-
-interface SubSectionConfidences {
-  [subsectionId: string]: {
-    [requirementIndex: number]: string;
-  };
-}
-
-interface ConfidencesState {
-  specification: Specification;
-  sections: SectionConfidences;
-  subsections: SubSectionConfidences;
-}
-
-const DEFAULT_CONFIDENCE: ConfidencesState = {
-  specification: {
-    specificationId: 'HOGWARTS',
-    examBoard: "Hogwards",
-    qualificationCode: "MGS",
-    subject: "Muggle Studdies",
-    components: [],
-  },
-  sections: {},
-  subsections: {},
-};
-
-interface ConfidenceInitAction {
-  type: "init";
-  specification: Specification;
-}
-
-interface ConfidenceSetAction {
-  type: "set";
-  component: SpecificationComponent;
-  section: SpecificationSection;
-  subsection: SpecificationSubSection;
-  requirementIndex: number;
-  confidence: string;
-}
-
-const confidenceReducer = (
-  state: ConfidencesState,
-  action: ConfidenceSetAction | ConfidenceInitAction
-): ConfidencesState => {
-  switch (action.type) {
-    case "set": {
-      const subsections: SubSectionConfidences = {
-        ...state.subsections,
-        [action.subsection.id]: {
-          ...state.subsections[action.subsection.id],
-          [action.requirementIndex]: action.confidence,
-        },
-      };
-      const sections: SectionConfidences = {};
-      state.specification.components.forEach((component) => {
-        component.sections.forEach((section) => {
-          if (!sections[section.id]) {
-            sections[section.id] = {};
-          }
-          section.subsections.forEach((subsection) => {
-            if (!subsections[subsection.id]) {
-              subsections[subsection.id] = {};
-            }
-            subsection.requirements.forEach((_, requirementIndex) => {
-              let confidence: string =
-                subsections[subsection.id][requirementIndex] ||
-                CONFIDENCE_OPTIONS[0].name;
-              if (!sections[section.id][confidence]) {
-                sections[section.id][confidence] = 0;
-              }
-              sections[section.id][confidence] += 1;
-            });
-          });
-        });
-      });
-
-      return {
-        specification: state.specification,
-        sections,
-        subsections,
-      };
-    }
-    case "init": {
-      const sections: SectionConfidences = {};
-      const subsections: SubSectionConfidences = {};
-      action.specification.components.forEach((component) =>
-        component.sections.forEach((section) => {
-          sections[section.id] = CONFIDENCE_OPTIONS.map((c) => c.name).reduce(
-            (acc, curr) => ({ ...acc, [curr]: 0 }),
-            {}
-          );
-
-          section.subsections.forEach((subsection) => {
-            if (!subsections[subsection.id]) {
-              subsections[subsection.id] = {};
-            }
-            subsection.requirements.forEach((_, requirementIndex) => {
-              subsections[subsection.id][requirementIndex] =
-                CONFIDENCE_OPTIONS[0].name;
-              sections[section.id][CONFIDENCE_OPTIONS[0].name] += 1;
-            });
-          });
-        })
-      );
-
-      return {
-        specification: action.specification,
-        sections,
-        subsections,
-      };
-    }
-  }
-};
 
 const getRequirementId = ({ id }: SpecificationSubSection, rIndex: number) =>
   `${id}-${rIndex}`;
 
 const App: React.FunctionComponent = () => {
   const { componentProps: specPickerProps } = useSpecificationPicker();
-  const specification = useSpec(specPickerProps.value);
-  const { examBoard, qualificationCode, subject, components } = specification;
-
-  const [confidences, dispatchConfidence] = React.useReducer(
-    confidenceReducer,
-    DEFAULT_CONFIDENCE
-  );
-
-  React.useEffect(() => dispatchConfidence({ type: "init", specification }), [
-    specification,
-  ]);
+  const {
+    specificationId,
+    examBoard,
+    qualificationCode,
+    subject,
+    components,
+  } = useSpec(specPickerProps.value);
+  const { tracker, updateConfidence } = useTracker({
+    studentId: "",
+    specificationId,
+  });
 
   const onConfidenceChangeById: OnChangeById = React.useMemo(() => {
     const byId: OnChangeById = {};
@@ -164,16 +46,15 @@ const App: React.FunctionComponent = () => {
         section.subsections.forEach((subsection) => {
           subsection.requirements.forEach((_, requirementIndex) => {
             byId[getRequirementId(subsection, requirementIndex)] = (
-              confidence: string
+              confidence: Confidence
             ) => {
-              dispatchConfidence({
-                type: "set",
-                component,
-                section,
-                subsection,
+              updateConfidence(
+                component.id,
+                section.id,
+                subsection.id,
                 requirementIndex,
-                confidence,
-              });
+                confidence
+              );
             };
           });
         })
@@ -181,7 +62,7 @@ const App: React.FunctionComponent = () => {
     );
 
     return byId;
-  }, [components]);
+  }, [components, updateConfidence]);
 
   return (
     <MainDiv>
@@ -195,76 +76,100 @@ const App: React.FunctionComponent = () => {
           <h2>
             {component.id} - {component.name}
           </h2>
-          {component.sections.map((section) => (
-            <React.Fragment key={section.id}>
-              <h3>
-                {section.id} - {section.title}
-              </h3>
-              <RequirementTable>
-                <thead>
-                  <tr>
-                    {CONFIDENCE_OPTIONS.map(({ name }) => (
-                      <th key={name}>{name}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.keys(confidences.sections)
-                    .filter((s) => s === section.id)
-                    .map((s) => (
-                      <tr key={s}>
-                        {CONFIDENCE_OPTIONS.map(({ name }) => (
+          {component.sections
+            .map((section) => ({
+              section,
+              sectionTracker:
+                tracker.components[component.id].sections[section.id],
+            }))
+            .map(({ section, sectionTracker }) => (
+              <React.Fragment key={section.id}>
+                <h3>
+                  {section.id} - {section.title}
+                </h3>
+                <RequirementTable>
+                  <thead>
+                    <tr>
+                      {CONFIDENCE_OPTIONS.map(({ name }) => (
+                        <th key={name}>{name}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      <tr key={section.id}>
+                        {/* {CONFIDENCE_OPTIONS.map(({ name }) => (
                           <td key={name}>
                             {(confidences.sections[s] || {})[name]}
                           </td>
-                        ))}
+                        ))} */}
                       </tr>
-                    ))}
-                </tbody>
-              </RequirementTable>
-              <div>{section.description}</div>
-              {section.subsections.map((subsection) => (
-                <React.Fragment key={subsection.id}>
-                  <h4>
-                    {subsection.id} - {subsection.title}
-                  </h4>
-                  <RequirementTable>
-                    <thead>
-                      <tr>
-                        <th>Requirement</th>
-                        <th>Confidence</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {subsection.requirements.map((r, requirementIndex) => (
-                        <tr key={requirementIndex}>
-                          <td>{r}</td>
-                          <td>
-                            <ConfidencePicker
-                              onChange={
-                                onConfidenceChangeById[
-                                getRequirementId(subsection, requirementIndex)
-                                ]
-                              }
-                              value={
-                                (confidences.subsections[subsection.id] || {})[
-                                requirementIndex
-                                ]
-                              }
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </RequirementTable>
-                </React.Fragment>
-              ))}
-            </React.Fragment>
-          ))}
+                    }
+                  </tbody>
+                </RequirementTable>
+                <div>{section.description}</div>
+                {section.subsections
+                  .map((subsection) => ({
+                    subsection,
+                    subsectionTracker:
+                      sectionTracker.subsections[subsection.id],
+                  }))
+                  .map(({ subsection, subsectionTracker }) => (
+                    <React.Fragment key={subsection.id}>
+                      <h4>
+                        {subsection.id} - {subsection.title}
+                      </h4>
+                      <RequirementTable>
+                        <thead>
+                          <tr>
+                            <th>Requirement</th>
+                            <th>Confidence</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {subsection.requirements
+                            .map((requirement, requirementIndex) => ({
+                              requirement,
+                              requirementIndex,
+                              requirementTracker:
+                                subsectionTracker.requirements[
+                                  requirementIndex
+                                ],
+                            }))
+                            .map(
+                              ({
+                                requirement,
+                                requirementIndex,
+                                requirementTracker,
+                              }) => (
+                                <tr key={requirementIndex}>
+                                  <td>{requirement}</td>
+                                  <td>
+                                    <ConfidencePicker
+                                      onChange={
+                                        onConfidenceChangeById[
+                                          getRequirementId(
+                                            subsection,
+                                            requirementIndex
+                                          )
+                                        ]
+                                      }
+                                      value={requirementTracker.confidence}
+                                    />
+                                  </td>
+                                </tr>
+                              )
+                            )}
+                        </tbody>
+                      </RequirementTable>
+                    </React.Fragment>
+                  ))}
+              </React.Fragment>
+            ))}
         </React.Fragment>
       ))}
     </MainDiv>
   );
-}
+};
 
 export default App;

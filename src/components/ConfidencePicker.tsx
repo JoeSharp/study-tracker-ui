@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Confidence } from '../types';
+import { Confidence } from "../types";
 
 export interface ConfidenceOption {
   confidence: Confidence;
@@ -37,8 +37,8 @@ export const CONFIDENCE_OPTIONS: ConfidenceOption[] = [
 ];
 
 interface Props {
-  value: string;
-  onChange: (v: string) => any;
+  value: Confidence;
+  onChange: (v: Confidence) => any;
 }
 
 const ConfidencePicker: React.FunctionComponent<Props> = ({
@@ -46,14 +46,14 @@ const ConfidencePicker: React.FunctionComponent<Props> = ({
   onChange,
 }) => {
   const onSelectChange: React.ChangeEventHandler<HTMLSelectElement> = React.useCallback(
-    ({ target: { value } }) => onChange(value),
+    ({ target: { value } }) => onChange(parseInt(value)),
     [onChange]
   );
 
   return (
     <select onChange={onSelectChange} value={value}>
-      {CONFIDENCE_OPTIONS.map(({ name }) => (
-        <option key={name} value={name}>
+      {CONFIDENCE_OPTIONS.map(({ name, confidence }) => (
+        <option key={name} value={confidence}>
           {name}
         </option>
       ))}

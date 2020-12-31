@@ -4,8 +4,10 @@ import ocrALevelComputerScience from "./specs/ocrALevelComputerScience";
 
 const useSpecification = (specificationId: string): Specification => {
   const { value } = useLocalStorage<Specification>(
-    `specification-${specificationId}`, ocrALevelComputerScience,
-    useStoreObjectFactory<Specification>());
+    `specification-${specificationId}`,
+    ocrALevelComputerScience,
+    useStoreObjectFactory<Specification>()
+  );
 
   return value;
 };

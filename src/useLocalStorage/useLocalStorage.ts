@@ -1,6 +1,6 @@
 import React from "react";
 
-type ValueReducer<T> = (existingValue: T) => T;
+type ValueReducer<OBJECT> = (existingValue: OBJECT) => OBJECT;
 
 interface OutProps<T> {
   value: T;
@@ -51,12 +51,14 @@ export const useStoreObjectFactory = <T>(): StringConversion<T> => {
   );
 };
 
-const useLocalStorage = function <T>(
+const useLocalStorage = function <OBJECT>(
   stateName: string,
-  noLocalStorageInitialState: T,
-  stringConversion: StringConversion<T>
-): OutProps<T> {
-  const [value, setStateValue] = React.useState<T>(noLocalStorageInitialState);
+  noLocalStorageInitialState: OBJECT,
+  stringConversion: StringConversion<OBJECT>
+): OutProps<OBJECT> {
+  const [value, setStateValue] = React.useState<OBJECT>(
+    noLocalStorageInitialState
+  );
 
   const getFromStorage = React.useCallback(() => {
     const rawValue: string | null = localStorage.getItem(stateName);
@@ -74,7 +76,7 @@ const useLocalStorage = function <T>(
   }, [stateName, setStateValue, getFromStorage]);
 
   const setValue = React.useCallback(
-    (valueToSet: T) => {
+    (valueToSet: OBJECT) => {
       const asString = stringConversion.toString(valueToSet);
       localStorage.setItem(stateName, asString);
       setStateValue(valueToSet);
@@ -83,7 +85,7 @@ const useLocalStorage = function <T>(
   );
 
   const reduceValue = React.useCallback(
-    (reducer: ValueReducer<T>) => {
+    (reducer: ValueReducer<OBJECT>) => {
       const existingValue = getFromStorage();
       const newValue = reducer(existingValue);
       setValue(newValue);
