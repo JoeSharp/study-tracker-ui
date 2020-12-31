@@ -33,7 +33,7 @@ const App: React.FunctionComponent = () => {
     subject,
     components,
   } = useSpec(specPickerProps.value);
-  const { tracker, updateConfidence } = useTracker({
+  const { tracker, dashboardSummary, updateConfidence } = useTracker({
     studentId: "",
     specificationId,
   });
@@ -71,11 +71,52 @@ const App: React.FunctionComponent = () => {
       <div>
         {examBoard} - {qualificationCode}
       </div>
+      <h2>Dashboard Summary</h2>
       {components.map((component) => (
-        <React.Fragment key={component.name}>
-          <h2>
+        <React.Fragment key={component.id}>
+          <h3>{component.name}</h3>
+          <RequirementTable>
+            <thead>
+              <tr>
+                <th>{component.name}</th>
+                <th>%</th>
+                {CONFIDENCE_OPTIONS.map(({ name }) => (
+                  <th key={name}>{name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {component.sections
+                .map((section) => ({
+                  section,
+                  sectionTracker: dashboardSummary[section.id],
+                }))
+                .map(({ section, sectionTracker }) => (
+                  <React.Fragment key={section.id}>
+                    {
+                      <tr key={section.id}>
+                        <td>{section.title}</td>
+                        <td>{sectionTracker.percentCovered.toFixed(1)}</td>
+                        {CONFIDENCE_OPTIONS.map(({ confidence, name }) => (
+                          <td key={name}>
+                            {sectionTracker.byConfidence[confidence] || 0}
+                          </td>
+                        ))}
+                      </tr>
+                    }
+                  </React.Fragment>
+                ))}
+            </tbody>
+          </RequirementTable>
+        </React.Fragment>
+      ))}
+
+      <h2>All Components</h2>
+      {components.map((component) => (
+        <React.Fragment key={component.id}>
+          <h3>
             {component.id} - {component.name}
-          </h2>
+          </h3>
           {component.sections
             .map((section) => ({
               section,
@@ -87,27 +128,7 @@ const App: React.FunctionComponent = () => {
                 <h3>
                   {section.id} - {section.title}
                 </h3>
-                <RequirementTable>
-                  <thead>
-                    <tr>
-                      {CONFIDENCE_OPTIONS.map(({ name }) => (
-                        <th key={name}>{name}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      <tr key={section.id}>
-                        {/* {CONFIDENCE_OPTIONS.map(({ name }) => (
-                          <td key={name}>
-                            {(confidences.sections[s] || {})[name]}
-                          </td>
-                        ))} */}
-                      </tr>
-                    }
-                  </tbody>
-                </RequirementTable>
-                <div>{section.description}</div>
+                <p>{section.description}</p>
                 {section.subsections
                   .map((subsection) => ({
                     subsection,

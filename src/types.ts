@@ -30,11 +30,24 @@ export enum Confidence {
   veryHigh = 1,
   high = 2,
   median = 3,
-  low = 4
+  low = 4,
 }
 
 export interface RequirementTracker {
   confidence: Confidence;
+}
+
+export interface ByConfidenceCount {
+  [confidence: number]: number;
+}
+
+export interface SectionSummary {
+  percentCovered: number;
+  byConfidence: ByConfidenceCount;
+}
+
+export interface TrackerDashboardSummary {
+  [sectionId: string]: SectionSummary;
 }
 
 export interface SpecificationSubSectionTracker {
@@ -43,21 +56,19 @@ export interface SpecificationSubSectionTracker {
 
 export interface SpecificationSectionTracker {
   subsections: {
-    [id: string]: SpecificationSubSectionTracker
-  }
+    [id: string]: SpecificationSubSectionTracker;
+  };
 }
 
 export interface SpecificationComponentTracker {
   sections: {
-    [id: string]: SpecificationSectionTracker
-  }
+    [id: string]: SpecificationSectionTracker;
+  };
 }
 
 export interface SpecificationTracker {
   specificationId: string;
   components: {
     [id: string]: SpecificationComponentTracker;
-  }
+  };
 }
-
-

@@ -9,9 +9,12 @@ import {
   SpecificationSubSectionTracker,
   SpecificationSectionTracker,
   Confidence,
+  TrackerDashboardSummary,
+  ByConfidenceCount,
 } from "../types";
 import useLocalStorage, { useStoreObjectFactory } from "../useLocalStorage";
 import useSpecification from "../useSpecification";
+import { CONFIDENCE_OPTIONS } from "../components/ConfidencePicker";
 
 interface Props {
   studentId: string;
@@ -20,6 +23,7 @@ interface Props {
 
 export interface UseTracker {
   tracker: SpecificationTracker;
+  dashboardSummary: TrackerDashboardSummary;
   updateConfidence: (
     componentId: string,
     sectionId: string,
@@ -103,26 +107,40 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
       reduceValue((savedTracker) => {
         return {
           ...savedTracker,
+          // Overwrite components
           components: {
+            // All existing components
             ...savedTracker.components,
+            // Replace this component
             [componentId]: {
+              // Keep most of the component
               ...savedTracker.components[componentId],
+              // Rewrite the sections
               sections: {
+                // All existing sections
                 ...savedTracker.components[componentId].sections,
+                // Overwrite this section
                 [sectionId]: {
+                  // Keep most of existing section
                   ...savedTracker.components[componentId].sections[sectionId],
+                  // Rewrite sub sections
                   subsections: {
+                    // Keep most of subsection
                     ...savedTracker.components[componentId].sections[sectionId]
                       .subsections,
+                    // Rewrite this subsection
                     [subsectionId]: {
+                      // Keep most of subsection
                       ...savedTracker.components[componentId].sections[
                         sectionId
                       ].subsections[subsectionId],
+                      // Rewrite requirements
                       requirements: savedTracker.components[
                         componentId
                       ].sections[sectionId].subsections[
                         subsectionId
                       ].requirements.map((r, i) => {
+                        // Replace the correct requirement
                         if (i === requirementIndex) {
                           return {
                             ...r,
@@ -144,7 +162,53 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
     [reduceValue]
   );
 
-  return { tracker, updateConfidence };
+  const dashboardSummary = React.useMemo((): TrackerDashboardSummary => {
+    const _dashboardSummary: TrackerDashboardSummary = {};
+
+    specification.components
+      .map((component) => ({
+        component,
+        componentTracker: tracker.components[component.id],
+      }))
+      .forEach(({ component, componentTracker }) => {
+        component.sections
+          .map((section) => ({
+            section,
+            sectionTracker: componentTracker.sections[section.id],
+          }))
+          .forEach(({ section, sectionTracker }) => {
+            let requirementTotalCount = 0;
+            let requirementCoveredCount = 0;
+            let byConfidence: ByConfidenceCount = CONFIDENCE_OPTIONS.reduce(
+              (acc, curr) => ({ ...acc, [curr.confidence]: 0 }),
+              {}
+            );
+
+            section.subsections
+              .map((subsection) => sectionTracker.subsections[subsection.id])
+              .forEach((subsectionTracker) => {
+                subsectionTracker.requirements.forEach(({ confidence }) => {
+                  requirementTotalCount++;
+                  if (confidence !== Confidence.notCovered) {
+                    requirementCoveredCount++;
+                  }
+                  byConfidence[confidence]++;
+                });
+              });
+
+            const percentCovered =
+              (100 * requirementCoveredCount) / requirementTotalCount;
+            _dashboardSummary[section.id] = {
+              percentCovered,
+              byConfidence,
+            };
+          });
+      });
+
+    return _dashboardSummary;
+  }, [specification, tracker]);
+
+  return { tracker, dashboardSummary, updateConfidence };
 };
 
 export default useTracker;
