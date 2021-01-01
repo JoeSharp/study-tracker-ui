@@ -1,8 +1,6 @@
 import React from "react";
-
-import { Specification } from "../types";
-import useLocalStorage, { useStoreObjectFactory } from "../useLocalStorage";
-import ocrALevelComputerScience from "../useSpecification/specs/ocrALevelComputerScience";
+import useSpecifications from "../../api/useSpecifications";
+import { Specification } from "../../types";
 
 export interface SpecificationOption {
   specificationId: string;
@@ -10,22 +8,16 @@ export interface SpecificationOption {
 }
 
 interface Props {
+  specifications: Specification[];
   value: string;
   onChange: (v: string) => any;
 }
 
-const defaultSpecifications: Specification[] = [ocrALevelComputerScience];
-
 const SpecificationPicker: React.FunctionComponent<Props> = ({
   value,
   onChange,
+  specifications,
 }) => {
-  const { value: specifications } = useLocalStorage(
-    "specifications",
-    defaultSpecifications,
-    useStoreObjectFactory<Specification[]>()
-  );
-
   const onSelectChange: React.ChangeEventHandler<HTMLSelectElement> = React.useCallback(
     ({ target: { value } }) => onChange(value),
     [onChange]
@@ -49,12 +41,15 @@ interface UsePicker {
 }
 
 export const usePicker = (): UsePicker => {
+  const { specifications, defaultSpecification } = useSpecifications();
+
   const [value, onChange] = React.useState<string>(
-    ocrALevelComputerScience.specificationId
+    defaultSpecification.specificationId
   );
 
   return {
     componentProps: {
+      specifications,
       value,
       onChange,
     },

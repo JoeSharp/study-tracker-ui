@@ -11,10 +11,12 @@ import {
   Confidence,
   TrackerDashboardSummary,
   ByConfidenceCount,
-} from "../types";
-import useLocalStorage, { useStoreObjectFactory } from "../useLocalStorage";
+} from "../../types";
+import useLocalStorage, {
+  useStoreObjectFactory,
+} from "../../lib/useLocalStorage";
 import useSpecification from "../useSpecification";
-import { CONFIDENCE_OPTIONS } from "../components/ConfidencePicker";
+import { CONFIDENCE_OPTIONS } from "../../components/ConfidencePicker/ConfidencePicker";
 
 interface Props {
   studentId: string;
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export interface UseTracker {
+  specification: Specification;
   tracker: SpecificationTracker;
   dashboardSummary: TrackerDashboardSummary;
   updateConfidence: (
@@ -208,7 +211,7 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
     return _dashboardSummary;
   }, [specification, tracker]);
 
-  return { tracker, dashboardSummary, updateConfidence };
+  return { specification, tracker, dashboardSummary, updateConfidence };
 };
 
 export default useTracker;

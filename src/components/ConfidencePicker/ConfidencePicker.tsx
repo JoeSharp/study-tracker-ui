@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Confidence } from "../types";
+import { Confidence } from "../../types";
 
 export interface ConfidenceOption {
   confidence: Confidence;

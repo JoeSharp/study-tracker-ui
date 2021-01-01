@@ -1,5 +1,7 @@
-import { Specification } from "../types";
-import useLocalStorage, { useStoreObjectFactory } from "../useLocalStorage";
+import { Specification } from "../../types";
+import useLocalStorage, {
+  useStoreObjectFactory,
+} from "../../lib/useLocalStorage";
 import ocrALevelComputerScience from "./specs/ocrALevelComputerScience";
 
 const useSpecification = (specificationId: string): Specification => {

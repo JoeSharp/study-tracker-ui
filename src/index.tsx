@@ -1,11 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createBrowserHistory as createHistory } from "history";
+
 import App from "./App";
+import { CustomRouter } from "./lib/useAppNavigation";
 import reportWebVitals from "./reportWebVitals";
+
+export const history = createHistory();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CustomRouter history={history}>
+      <App />
+    </CustomRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

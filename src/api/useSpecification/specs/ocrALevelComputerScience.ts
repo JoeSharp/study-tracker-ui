@@ -1,7 +1,7 @@
-import { Specification } from "../../types";
+import { Specification } from "../../../types";
 
 const ocrALevelComputerScience: Specification = {
-  specificationId: 'a2f3126a-c0f3-4db8-bbb2-f820d67fdd53',
+  specificationId: "a2f3126a-c0f3-4db8-bbb2-f820d67fdd53",
   examBoard: "OCR",
   subject: "Computer Science",
   qualificationCode: "H446",
