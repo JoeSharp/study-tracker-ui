@@ -29,7 +29,7 @@ export enum Confidence {
   notCovered = 0,
   veryHigh = 1,
   high = 2,
-  median = 3,
+  medium = 3,
   low = 4,
 }
 

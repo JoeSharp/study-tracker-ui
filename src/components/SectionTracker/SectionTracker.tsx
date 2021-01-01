@@ -2,15 +2,7 @@ import React from "react";
 import useTracker from "../../api/useTracker";
 import useAppNavigation from "../../lib/useAppNavigation";
 import { StyledTable } from "../../styles";
-import { Confidence, ISpecificationSubSection } from "../../types";
 import ConfidencePicker from "../ConfidencePicker";
-
-interface OnChangeById {
-  [s: string]: (v: Confidence) => any;
-}
-
-const getRequirementId = ({ id }: ISpecificationSubSection, rIndex: number) =>
-  `${id}-${rIndex}`;
 
 export interface Props {
   componentId: string;
@@ -28,41 +20,11 @@ const SectionTrackerDashboard: React.FunctionComponent<Props> = ({
   const {
     specification: { components },
     tracker,
-    updateConfidence,
+    getOnUpdateConfidence,
   } = useTracker({
     studentId: "",
     specificationId,
   });
-
-  const onConfidenceChangeById: OnChangeById = React.useMemo(() => {
-    const byId: OnChangeById = {};
-
-    components
-      .filter(({ id }) => id === componentId)
-      .forEach((component) =>
-        component.sections
-          .filter(({ id }) => id === sectionId)
-          .forEach((section) =>
-            section.subsections.forEach((subsection) => {
-              subsection.requirements.forEach((_, requirementIndex) => {
-                byId[getRequirementId(subsection, requirementIndex)] = (
-                  confidence: Confidence
-                ) => {
-                  updateConfidence(
-                    component.id,
-                    section.id,
-                    subsection.id,
-                    requirementIndex,
-                    confidence
-                  );
-                };
-              });
-            })
-          )
-      );
-
-    return byId;
-  }, [componentId, sectionId, components, updateConfidence]);
 
   return (
     <React.Fragment>
@@ -126,21 +88,19 @@ const SectionTrackerDashboard: React.FunctionComponent<Props> = ({
                                 ({
                                   requirement,
                                   requirementIndex,
-                                  requirementTracker,
+                                  requirementTracker: { confidence },
                                 }) => (
                                   <tr key={requirementIndex}>
                                     <td>{requirement}</td>
                                     <td>
                                       <ConfidencePicker
-                                        onChange={
-                                          onConfidenceChangeById[
-                                            getRequirementId(
-                                              subsection,
-                                              requirementIndex
-                                            )
-                                          ]
-                                        }
-                                        value={requirementTracker.confidence}
+                                        onChange={getOnUpdateConfidence(
+                                          component.id,
+                                          section.id,
+                                          subsection.id,
+                                          requirementIndex
+                                        )}
+                                        value={confidence}
                                       />
                                     </td>
                                   </tr>

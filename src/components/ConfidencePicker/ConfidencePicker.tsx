@@ -25,8 +25,8 @@ export const CONFIDENCE_OPTIONS: ConfidenceOption[] = [
     colour: "green",
   },
   {
-    confidence: Confidence.median,
-    name: "Median",
+    confidence: Confidence.medium,
+    name: "Medium",
     colour: "orange",
   },
   {
@@ -36,9 +36,11 @@ export const CONFIDENCE_OPTIONS: ConfidenceOption[] = [
   },
 ];
 
+export type OnConfidenceChange = (v: Confidence) => any;
+
 interface Props {
   value: Confidence;
-  onChange: (v: Confidence) => any;
+  onChange: OnConfidenceChange;
 }
 
 const ConfidencePicker: React.FunctionComponent<Props> = ({

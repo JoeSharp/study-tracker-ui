@@ -16,24 +16,37 @@ import useLocalStorage, {
   useStoreObjectFactory,
 } from "../../lib/useLocalStorage";
 import useSpecification from "../useSpecification";
-import { CONFIDENCE_OPTIONS } from "../../components/ConfidencePicker/ConfidencePicker";
+import {
+  CONFIDENCE_OPTIONS,
+  OnConfidenceChange,
+} from "../../components/ConfidencePicker/ConfidencePicker";
 
 interface Props {
   studentId: string;
   specificationId: string;
 }
 
+interface OnChangeConfidenceById {
+  [s: string]: OnConfidenceChange;
+}
+
+const getRequirementId = (
+  componentId: string,
+  sectionId: string,
+  subsectionId: string,
+  rIndex: number
+) => [componentId, sectionId, subsectionId, rIndex.toString()].join("-");
+
 export interface UseTracker {
   specification: ISpecification;
   tracker: ISpecificationTracker;
   dashboardSummary: ITrackerDashboardSummary;
-  updateConfidence: (
+  getOnUpdateConfidence: (
     componentId: string,
     sectionId: string,
     subsectionId: string,
-    requirementIndex: number,
-    confidence: Confidence
-  ) => void;
+    requirementIndex: number
+  ) => OnConfidenceChange;
 }
 
 function generateSubSectionTracker(
@@ -145,17 +158,15 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
                         componentId
                       ].sections[sectionId].subsections[
                         subsectionId
-                      ].requirements.map((r, i) => {
-                        // Replace the correct requirement
-                        if (i === requirementIndex) {
-                          return {
-                            ...r,
-                            confidence,
-                          };
-                        } else {
-                          return r;
-                        }
-                      }),
+                      ].requirements.map((r, i) =>
+                        // Replace requirement if matches replacement index
+                        i === requirementIndex
+                          ? {
+                              ...r, // Keep other aspects of requirement
+                              confidence, // Replace the confidence level
+                            }
+                          : r
+                      ),
                     },
                   },
                 },
@@ -214,7 +225,51 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
     return _dashboardSummary;
   }, [specification, tracker]);
 
-  return { specification, tracker, dashboardSummary, updateConfidence };
+  const onChangeConfidenceById: OnChangeConfidenceById = React.useMemo(() => {
+    const byId: OnChangeConfidenceById = {};
+
+    specification.components.forEach((component) =>
+      component.sections.forEach((section) =>
+        section.subsections.forEach((subsection) => {
+          subsection.requirements.forEach((_, requirementIndex) => {
+            byId[
+              getRequirementId(
+                component.id,
+                section.id,
+                subsection.id,
+                requirementIndex
+              )
+            ] = (confidence: Confidence) => {
+              updateConfidence(
+                component.id,
+                section.id,
+                subsection.id,
+                requirementIndex,
+                confidence
+              );
+            };
+          });
+        })
+      )
+    );
+
+    return byId;
+  }, [specification, updateConfidence]);
+
+  const getOnUpdateConfidence = React.useCallback(
+    (
+      componentId: string,
+      sectionId: string,
+      subsectionId: string,
+      requirementIndex: number
+    ) =>
+      onChangeConfidenceById[
+        getRequirementId(componentId, sectionId, subsectionId, requirementIndex)
+      ],
+    [onChangeConfidenceById]
+  );
+
+  return { specification, tracker, dashboardSummary, getOnUpdateConfidence };
 };
 
 export default useTracker;
