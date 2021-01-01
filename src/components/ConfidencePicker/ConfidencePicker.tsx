@@ -5,34 +5,28 @@ import { Confidence } from "../../types";
 export interface ConfidenceOption {
   confidence: Confidence;
   name: string;
-  colour: string;
 }
 
 export const CONFIDENCE_OPTIONS: ConfidenceOption[] = [
   {
     confidence: Confidence.notCovered,
     name: "Not covered",
-    colour: "white",
   },
   {
     confidence: Confidence.veryHigh,
     name: "Very High",
-    colour: "purple",
   },
   {
     confidence: Confidence.high,
     name: "High",
-    colour: "green",
   },
   {
     confidence: Confidence.medium,
     name: "Medium",
-    colour: "orange",
   },
   {
     confidence: Confidence.low,
     name: "Low",
-    colour: "red",
   },
 ];
 

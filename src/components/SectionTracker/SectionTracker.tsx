@@ -1,8 +1,20 @@
 import React from "react";
+import styled from "styled-components";
 import useTracker from "../../api/useTracker";
 import useAppNavigation from "../../lib/useAppNavigation";
 import { StyledTable } from "../../styles";
 import ConfidencePicker from "../ConfidencePicker";
+
+export const RequirementTable = styled(StyledTable)`
+  th.requirement-heading {
+    background-color: lime;
+  }
+
+  th.confidence-heading {
+    width: 10rem;
+    background-color: purple;
+  }
+`;
 
 export interface Props {
   componentId: string;
@@ -67,11 +79,13 @@ const SectionTrackerDashboard: React.FunctionComponent<Props> = ({
                         <h4>
                           {subsection.id} - {subsection.title}
                         </h4>
-                        <StyledTable>
+                        <RequirementTable>
                           <thead>
                             <tr>
-                              <th>Requirement</th>
-                              <th>Confidence</th>
+                              <th className="requirement-heading">
+                                Requirement
+                              </th>
+                              <th className="confidence-heading">Confidence</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -107,7 +121,7 @@ const SectionTrackerDashboard: React.FunctionComponent<Props> = ({
                                 )
                               )}
                           </tbody>
-                        </StyledTable>
+                        </RequirementTable>
                       </React.Fragment>
                     ))}
                 </React.Fragment>
