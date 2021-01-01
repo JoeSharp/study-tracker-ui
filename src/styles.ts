@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const RequirementTable = styled.table`
+export const StyledTable = styled.table`
   text-align: left;
   border-collapse: collapse;
 

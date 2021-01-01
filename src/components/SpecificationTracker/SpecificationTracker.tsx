@@ -1,7 +1,7 @@
 import React from "react";
 import useTracker from "../../api/useTracker";
 import useAppNavigation from "../../lib/useAppNavigation";
-import { RequirementTable } from "../../Styled";
+import { StyledTable } from "../../styles";
 import { CONFIDENCE_OPTIONS } from "../ConfidencePicker/ConfidencePicker";
 
 export interface Props {
@@ -36,7 +36,7 @@ const SpecificationTracker: React.FunctionComponent<Props> = ({
       {components.map((component) => (
         <React.Fragment key={component.id}>
           <h3>{component.name}</h3>
-          <RequirementTable>
+          <StyledTable>
             <thead>
               <tr>
                 <th>Track</th>
@@ -87,7 +87,7 @@ const SpecificationTracker: React.FunctionComponent<Props> = ({
                   </React.Fragment>
                 ))}
             </tbody>
-          </RequirementTable>
+          </StyledTable>
         </React.Fragment>
       ))}
     </div>

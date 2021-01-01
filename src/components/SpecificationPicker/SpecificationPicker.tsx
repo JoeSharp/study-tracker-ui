@@ -1,6 +1,6 @@
 import React from "react";
 import useSpecifications from "../../api/useSpecifications";
-import { Specification } from "../../types";
+import { ISpecification } from "../../types";
 
 export interface SpecificationOption {
   specificationId: string;
@@ -8,7 +8,7 @@ export interface SpecificationOption {
 }
 
 interface Props {
-  specifications: Specification[];
+  specifications: ISpecification[];
   value: string;
   onChange: (v: string) => any;
 }

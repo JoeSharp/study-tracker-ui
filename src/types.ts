@@ -1,28 +1,28 @@
-export interface SpecificationSubSection {
+export interface ISpecificationSubSection {
   id: string;
   title: string;
   requirements: string[];
 }
 
-export interface SpecificationSection {
+export interface ISpecificationSection {
   id: string;
   title: string;
   description?: string;
-  subsections: SpecificationSubSection[];
+  subsections: ISpecificationSubSection[];
 }
 
-export interface SpecificationComponent {
+export interface ISpecificationComponent {
   id: string;
   name: string;
-  sections: SpecificationSection[];
+  sections: ISpecificationSection[];
 }
 
-export interface Specification {
+export interface ISpecification {
   specificationId: string;
   examBoard: string;
   subject: string;
   qualificationCode: string;
-  components: SpecificationComponent[];
+  components: ISpecificationComponent[];
 }
 
 export enum Confidence {
@@ -33,42 +33,42 @@ export enum Confidence {
   low = 4,
 }
 
-export interface RequirementTracker {
+export interface IRequirementTracker {
   confidence: Confidence;
 }
 
-export interface ByConfidenceCount {
+export interface IByConfidenceCount {
   [confidence: number]: number;
 }
 
-export interface SectionSummary {
+export interface ISectionSummary {
   percentCovered: number;
-  byConfidence: ByConfidenceCount;
+  byConfidence: IByConfidenceCount;
 }
 
-export interface TrackerDashboardSummary {
-  [sectionId: string]: SectionSummary;
+export interface ITrackerDashboardSummary {
+  [sectionId: string]: ISectionSummary;
 }
 
-export interface SpecificationSubSectionTracker {
-  requirements: RequirementTracker[];
+export interface ISpecificationSubSectionTracker {
+  requirements: IRequirementTracker[];
 }
 
-export interface SpecificationSectionTracker {
+export interface ISpecificationSectionTracker {
   subsections: {
-    [id: string]: SpecificationSubSectionTracker;
+    [id: string]: ISpecificationSubSectionTracker;
   };
 }
 
-export interface SpecificationComponentTracker {
+export interface ISpecificationComponentTracker {
   sections: {
-    [id: string]: SpecificationSectionTracker;
+    [id: string]: ISpecificationSectionTracker;
   };
 }
 
-export interface SpecificationTracker {
+export interface ISpecificationTracker {
   specificationId: string;
   components: {
-    [id: string]: SpecificationComponentTracker;
+    [id: string]: ISpecificationComponentTracker;
   };
 }

@@ -1,21 +1,21 @@
-import { Specification } from "../../types";
+import { ISpecification } from "../../types";
 import useLocalStorage, {
   useStoreObjectFactory,
 } from "../../lib/useLocalStorage";
 import ocrALevelComputerScience from "../useSpecification/specs/ocrALevelComputerScience";
 
-const defaultSpecifications: Specification[] = [ocrALevelComputerScience];
+const defaultSpecifications: ISpecification[] = [ocrALevelComputerScience];
 
 export interface UseSpecifications {
-  specifications: Specification[];
-  defaultSpecification: Specification;
+  specifications: ISpecification[];
+  defaultSpecification: ISpecification;
 }
 
 const useSpecifications = (): UseSpecifications => {
   const { value: specifications } = useLocalStorage(
     "specifications",
     defaultSpecifications,
-    useStoreObjectFactory<Specification[]>()
+    useStoreObjectFactory<ISpecification[]>()
   );
 
   return {

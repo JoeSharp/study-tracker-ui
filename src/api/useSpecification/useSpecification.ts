@@ -1,14 +1,14 @@
-import { Specification } from "../../types";
+import { ISpecification } from "../../types";
 import useLocalStorage, {
   useStoreObjectFactory,
 } from "../../lib/useLocalStorage";
 import ocrALevelComputerScience from "./specs/ocrALevelComputerScience";
 
-const useSpecification = (specificationId: string): Specification => {
-  const { value } = useLocalStorage<Specification>(
+const useSpecification = (specificationId: string): ISpecification => {
+  const { value } = useLocalStorage<ISpecification>(
     `specification-${specificationId}`,
     ocrALevelComputerScience,
-    useStoreObjectFactory<Specification>()
+    useStoreObjectFactory<ISpecification>()
   );
 
   return value;

@@ -1,16 +1,16 @@
 import React from "react";
 import {
-  SpecificationComponentTracker,
-  SpecificationComponent,
-  Specification,
-  SpecificationSection,
-  SpecificationTracker,
-  SpecificationSubSection,
-  SpecificationSubSectionTracker,
-  SpecificationSectionTracker,
+  ISpecificationComponentTracker,
+  ISpecificationComponent,
+  ISpecification,
+  ISpecificationSection,
+  ISpecificationTracker,
+  ISpecificationSubSection,
+  ISpecificationSubSectionTracker,
+  ISpecificationSectionTracker,
   Confidence,
-  TrackerDashboardSummary,
-  ByConfidenceCount,
+  ITrackerDashboardSummary,
+  IByConfidenceCount,
 } from "../../types";
 import useLocalStorage, {
   useStoreObjectFactory,
@@ -24,9 +24,9 @@ interface Props {
 }
 
 export interface UseTracker {
-  specification: Specification;
-  tracker: SpecificationTracker;
-  dashboardSummary: TrackerDashboardSummary;
+  specification: ISpecification;
+  tracker: ISpecificationTracker;
+  dashboardSummary: ITrackerDashboardSummary;
   updateConfidence: (
     componentId: string,
     sectionId: string,
@@ -37,8 +37,8 @@ export interface UseTracker {
 }
 
 function generateSubSectionTracker(
-  subsection: SpecificationSubSection
-): SpecificationSubSectionTracker {
+  subsection: ISpecificationSubSection
+): ISpecificationSubSectionTracker {
   return {
     requirements: subsection.requirements.map((requirement) => ({
       confidence: Confidence.notCovered,
@@ -47,8 +47,8 @@ function generateSubSectionTracker(
 }
 
 function generateSectionTracker(
-  section: SpecificationSection
-): SpecificationSectionTracker {
+  section: ISpecificationSection
+): ISpecificationSectionTracker {
   return {
     subsections: section.subsections.reduce(
       (acc, subsection) => ({
@@ -61,8 +61,8 @@ function generateSectionTracker(
 }
 
 function generateComponent(
-  component: SpecificationComponent
-): SpecificationComponentTracker {
+  component: ISpecificationComponent
+): ISpecificationComponentTracker {
   return {
     sections: component.sections.reduce(
       (acc, section) => ({
@@ -74,7 +74,7 @@ function generateComponent(
   };
 }
 
-function useNewTracker(specification: Specification): SpecificationTracker {
+function useNewTracker(specification: ISpecification): ISpecificationTracker {
   return React.useMemo(
     () => ({
       specificationId: specification.specificationId,
@@ -93,10 +93,13 @@ function useNewTracker(specification: Specification): SpecificationTracker {
 const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
   const specification = useSpecification(specificationId);
 
-  const { value: tracker, reduceValue } = useLocalStorage<SpecificationTracker>(
+  const {
+    value: tracker,
+    reduceValue,
+  } = useLocalStorage<ISpecificationTracker>(
     `tracker-${studentId}-${specificationId}`,
     useNewTracker(specification),
-    useStoreObjectFactory<SpecificationTracker>()
+    useStoreObjectFactory<ISpecificationTracker>()
   );
 
   const updateConfidence = React.useCallback(
@@ -165,8 +168,8 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
     [reduceValue]
   );
 
-  const dashboardSummary = React.useMemo((): TrackerDashboardSummary => {
-    const _dashboardSummary: TrackerDashboardSummary = {};
+  const dashboardSummary = React.useMemo((): ITrackerDashboardSummary => {
+    const _dashboardSummary: ITrackerDashboardSummary = {};
 
     specification.components
       .map((component) => ({
@@ -182,7 +185,7 @@ const useTracker = ({ studentId, specificationId }: Props): UseTracker => {
           .forEach(({ section, sectionTracker }) => {
             let requirementTotalCount = 0;
             let requirementCoveredCount = 0;
-            let byConfidence: ByConfidenceCount = CONFIDENCE_OPTIONS.reduce(
+            let byConfidence: IByConfidenceCount = CONFIDENCE_OPTIONS.reduce(
               (acc, curr) => ({ ...acc, [curr.confidence]: 0 }),
               {}
             );

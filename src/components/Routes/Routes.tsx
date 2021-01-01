@@ -2,9 +2,9 @@ import React from "react";
 import { Route, RouteComponentProps, Switch } from "react-router";
 
 import useAppNavigation from "../../lib/useAppNavigation";
-import SectionTrackerDashboard from "../SectionTrackerDashboard.tsx";
+import SectionTracker from "../SectionTracker";
 import SpecificationDashboard from "../SpecificationDashboard";
-import SpecificationTracker from "../SpecificationTrackerDashboard";
+import SpecificationTracker from "../SpecificationTracker";
 
 const Routes: React.FunctionComponent = () => {
   const { urlGenerator } = useAppNavigation();
@@ -39,7 +39,7 @@ const Routes: React.FunctionComponent = () => {
             params: { componentId, specificationId, sectionId },
           },
         }: RouteComponentProps<any>) => (
-          <SectionTrackerDashboard
+          <SectionTracker
             componentId={componentId}
             specificationId={specificationId}
             sectionId={sectionId}

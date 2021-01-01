@@ -1,15 +1,15 @@
 import React from "react";
 import useTracker from "../../api/useTracker";
 import useAppNavigation from "../../lib/useAppNavigation";
-import { RequirementTable } from "../../Styled";
-import { Confidence, SpecificationSubSection } from "../../types";
+import { StyledTable } from "../../styles";
+import { Confidence, ISpecificationSubSection } from "../../types";
 import ConfidencePicker from "../ConfidencePicker";
 
 interface OnChangeById {
   [s: string]: (v: Confidence) => any;
 }
 
-const getRequirementId = ({ id }: SpecificationSubSection, rIndex: number) =>
+const getRequirementId = ({ id }: ISpecificationSubSection, rIndex: number) =>
   `${id}-${rIndex}`;
 
 export interface Props {
@@ -105,7 +105,7 @@ const SectionTrackerDashboard: React.FunctionComponent<Props> = ({
                         <h4>
                           {subsection.id} - {subsection.title}
                         </h4>
-                        <RequirementTable>
+                        <StyledTable>
                           <thead>
                             <tr>
                               <th>Requirement</th>
@@ -147,7 +147,7 @@ const SectionTrackerDashboard: React.FunctionComponent<Props> = ({
                                 )
                               )}
                           </tbody>
-                        </RequirementTable>
+                        </StyledTable>
                       </React.Fragment>
                     ))}
                 </React.Fragment>
