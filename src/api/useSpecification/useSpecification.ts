@@ -1,4 +1,4 @@
-import { ISpecification } from "../../types";
+import { ISpecification } from "study-tracker-lib/dist/specificationModel";
 import useLocalStorage, {
   useStoreObjectFactory,
 } from "../../lib/useLocalStorage";

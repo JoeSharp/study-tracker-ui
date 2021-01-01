@@ -5,14 +5,23 @@ import { createBrowserHistory as createHistory } from "history";
 import App from "./App";
 import { CustomRouter } from "./lib/useAppNavigation";
 import reportWebVitals from "./reportWebVitals";
+import { ErrorReportingContextProvider } from "./lib/useErrorReporting";
+import { ClientSideDataProvider } from "./api/useClientSideData/useClientSideData";
+import { AuthenticationContextProvider } from "./lib/authentication";
 
 export const history = createHistory();
 
 ReactDOM.render(
   <React.StrictMode>
-    <CustomRouter history={history}>
-      <App />
-    </CustomRouter>
+    <ErrorReportingContextProvider>
+      <ClientSideDataProvider>
+        <AuthenticationContextProvider>
+          <CustomRouter history={history}>
+            <App />
+          </CustomRouter>
+        </AuthenticationContextProvider>
+      </ClientSideDataProvider>
+    </ErrorReportingContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -4,7 +4,10 @@ import useLocalStorage, {
 } from "../../lib/useLocalStorage";
 import ocrALevelComputerScience from "../useSpecification/specs/ocrALevelComputerScience";
 
-const defaultSpecifications: ISpecification[] = [ocrALevelComputerScience];
+// Specifications returned from listing will have components cleared out
+const defaultSpecifications: ISpecification[] = [
+  { ...ocrALevelComputerScience, components: [] },
+];
 
 export interface UseSpecifications {
   specifications: ISpecification[];
@@ -13,7 +16,7 @@ export interface UseSpecifications {
 
 const useSpecifications = (): UseSpecifications => {
   const { value: specifications } = useLocalStorage(
-    "specifications",
+    "specification-list",
     defaultSpecifications,
     useStoreObjectFactory<ISpecification[]>()
   );

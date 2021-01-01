@@ -1,5 +1,5 @@
 import React from "react";
-import useSpecifications from "../../api/useSpecifications";
+import useSpecifications from "../../api/useSpecificationList";
 import { ISpecification } from "../../types";
 
 export interface SpecificationOption {

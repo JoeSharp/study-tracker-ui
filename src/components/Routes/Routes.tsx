@@ -46,6 +46,8 @@ const Routes: React.FunctionComponent = () => {
           />
         )}
       />
+      {/* Default route */}
+      <Route render={() => <div>Path Not Found</div>} />
     </Switch>
   );
 };
